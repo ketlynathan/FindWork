@@ -1,0 +1,24 @@
+# --- Interface Gráfica ---
+streamlit>=1.35.0
+
+# --- Banco de Dados ---
+SQLAlchemy>=2.0.0
+aiosqlite>=0.20.0
+
+# --- Scraping e Requisições ---
+beautifulsoup4>=4.12.0
+requests>=2.31.0
+fake-useragent>=1.5.0
+
+# --- Inteligência Artificial ---
+google-genai>=0.1.0
+
+# --- Agendamento de Tarefas e Auxiliares ---
+APScheduler>=3.10.0
+pydantic>=2.7.0
+structlog>=24.1.0
+
+# --- Banco de Dados ---
+SQLAlchemy>=2.0.0
+aiosqlite>=0.20.0
+asyncpg>=0.29.0

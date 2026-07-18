@@ -1,0 +1,60 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# --- Ambientes Virtuais ---
+.venv/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# --- IDEs e Editores de Código ---
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*~
+
+# --- Banco de Dados Local (SQLite) e Logs ---
+*.db
+*.db-journal
+*.sqlite
+*.log
+
+# --- Variáveis de Ambiente e Segredos ---
+.env
+.env.local
+.env.*
+secrets.toml
+
+# --- Streamlit (Configurações locais de runtime) ---
+.streamlit/config.toml
+.streamlit/secrets.toml
+
+# --- Sistema Operacional ---
+.DS_Store
+Thumbs.db
