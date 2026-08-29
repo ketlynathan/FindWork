@@ -21,6 +21,6 @@
 - [ ] Corrigir o diretório raiz e o comando de instalação do Vercel para localizar o package.json e respeitar o lockfile do projeto.
 - [ ] Validar a configuração de build do Vercel e documentar que o backend Express/tRPC ainda requer adaptação para Functions.
 
-- [ ] Criar uma referência arquivada do protótipo Streamlit no GitHub.
-- [ ] Copiar a versão web migrada para o repositório GitHub sem levar segredos, caches ou artefatos de build.
-- [ ] Criar commit e enviar a versão web migrada para o GitHub, validando o resultado.
+- [x] Criar uma referência arquivada do protótipo Streamlit no GitHub.
+- [x] Copiar a versão web migrada para o repositório GitHub sem levar segredos, caches ou artefatos de build.
+- [x] Criar commit e enviar a versão web migrada para o GitHub, validando o resultado.
