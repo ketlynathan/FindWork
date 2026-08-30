@@ -12,6 +12,15 @@ export default function handler(_request: unknown, response: NodeResponse) {
       status: "ok",
       service: "findwork-api",
       runtime: "vercel-node",
+      configuration: {
+        oauth: Boolean(process.env.OAUTH_SERVER_URL && process.env.VITE_APP_ID),
+        session: Boolean(process.env.JWT_SECRET),
+        database: Boolean(process.env.DATABASE_URL),
+        storage: Boolean(
+          process.env.BUILT_IN_FORGE_API_URL &&
+            process.env.BUILT_IN_FORGE_API_KEY
+        ),
+      },
     })
   );
 }
