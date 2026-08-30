@@ -1,31 +1,57 @@
-import { OAUTH_STATE_COOKIE, encodeOAuthState } from "@shared/const";
+import {
+  encodeOAuthState,
+  OAUTH_STATE_COOKIE,
+} from "@shared/const";
 
 export { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
 
-// Start the Manus OAuth login. Call this from an event handler or effect at the
-// moment you want to navigate, e.g. `onClick={() => startLogin()}`.
-//
-// It has SIDE EFFECTS — it mints a one-time nonce, writes the __Host- state
-// cookie, and navigates immediately — so the cookie nonce always matches the
-// `state` it sends. Do NOT call it during render (no `href={startLogin()}` /
-// `loginUrl={...}`): each call overwrites the cookie, so a stray render-phase
-// call would desync it from an in-flight login and the callback would reject it
-// with "invalid oauth state". It returns void by design, so there is no URL to
-// stash across renders.
-export const startLogin = () => {
-  const oauthPortalUrl = import.meta.env.VITE_OAUTH_PORTAL_URL;
-  const appId = import.meta.env.VITE_APP_ID;
-  const redirectUri = `${window.location.origin}/api/oauth/callback`;
+const DEFAULT_OAUTH_PORTAL_URL = "https://manus.im";
+const DEFAULT_APP_ID = "4L7zwPUhv2uYW7DPRnKywz";
 
-  const nonce = crypto.randomUUID();
-  document.cookie = `${OAUTH_STATE_COOKIE}=${nonce}; Path=/; Max-Age=600; SameSite=None; Secure`;
+type OAuthLoginUrlOptions = {
+  origin: string;
+  nonce: string;
+  oauthPortalUrl?: string;
+  appId?: string;
+};
+
+/**
+ * Build the Manus OAuth URL without side effects so the redirect contract can
+ * be tested independently from the browser-only login handler.
+ */
+export const buildOAuthLoginUrl = ({
+  origin,
+  nonce,
+  oauthPortalUrl = DEFAULT_OAUTH_PORTAL_URL,
+  appId = DEFAULT_APP_ID,
+}: OAuthLoginUrlOptions): string => {
+  const redirectUri = `${origin}/api/oauth/callback`;
   const state = encodeOAuthState({ redirectUri, nonce });
+  const url = new URL("/app-auth", oauthPortalUrl);
 
-  const url = new URL(`${oauthPortalUrl}/app-auth`);
   url.searchParams.set("appId", appId);
   url.searchParams.set("redirectUri", redirectUri);
   url.searchParams.set("state", state);
   url.searchParams.set("type", "signIn");
 
-  window.location.href = url.toString();
+  return url.toString();
+};
+
+// Start Manus OAuth from an event handler. This function has side effects: it
+// mints a one-time nonce, writes the state cookie, and navigates immediately.
+export const startLogin = () => {
+  const oauthPortalUrl =
+    import.meta.env.VITE_OAUTH_PORTAL_URL || DEFAULT_OAUTH_PORTAL_URL;
+  const appId = import.meta.env.VITE_APP_ID || DEFAULT_APP_ID;
+  const nonce = crypto.randomUUID();
+
+  document.cookie = `${OAUTH_STATE_COOKIE}=${nonce}; Path=/; Max-Age=600; SameSite=None; Secure`;
+  window.location.assign(
+    buildOAuthLoginUrl({
+      origin: window.location.origin,
+      nonce,
+      oauthPortalUrl,
+      appId,
+    })
+  );
 };
