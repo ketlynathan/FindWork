@@ -1,14 +1,23 @@
 import express from "express";
 import type { Express, Request, Response } from "express";
-import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { registerOAuthRoutes } from "../server/_core/oauth";
-import { registerStorageProxy } from "../server/_core/storageProxy";
-import { appRouter } from "../server/routers";
-import { createContext } from "../server/_core/context";
 
 let appPromise: Promise<Express> | undefined;
 
 export async function createApiApp() {
+  const [
+    { createExpressMiddleware },
+    { registerOAuthRoutes },
+    { registerStorageProxy },
+    { appRouter },
+    { createContext },
+  ] = await Promise.all([
+    import("@trpc/server/adapters/express"),
+    import("../server/_core/oauth"),
+    import("../server/_core/storageProxy"),
+    import("../server/routers"),
+    import("../server/_core/context"),
+  ]);
+
   const app = express();
 
   app.get("/api/health", (_req, res) => {
